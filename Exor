@@ -1,0 +1,59 @@
+Verilog Code:-
+module AND2gate(A,B,Z);
+input A,B;
+output Z;
+assign Z=A&B;
+endmodule
+
+module OR2gate(A,B,Z);
+input A,B;
+output Z;
+assign Z=A|B;
+endmodule
+
+module NOTgate(A,Z);
+input A;
+output Z;
+assign Z=~A;
+endmodule
+
+module EXOR2gate(A,B,Z);
+ input A,B;
+output Z;
+wire t1,t2,t3,t4;
+
+ NOTgate N1 (.A(A),.Z(t1));
+ NOTgate N2 (.A(B),.Z(t2));
+ AND2gate A1 (.A(t1),.B(B),.Z(t3));
+ AND2gate A2 (.A(A),.B(t2),.Z(t4));
+ OR2gate OR1 (.A(t3),.B(t4),.Z(Z));
+
+endmodule
+
+Testbench:-
+module Main_tb;
+reg A;
+reg B;
+wire Z;
+
+EXOR2gate uut (.A(A),.B(B),.Z(Z));
+
+initial begin
+$dumpfile("test.vcd");
+    $dumpvars(0,Main_tb);
+
+$monitor(A,B,Z);
+
+A=1'b0;B=1'b0;
+#5
+A=1'b0;B=1'b1;
+#5
+A=1'b1;B=1'b0;
+#5
+A=1'b1;B=1'b1;
+
+$finish;
+
+end
+
+endmodule
